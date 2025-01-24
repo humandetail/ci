@@ -51,6 +51,16 @@ jobs:
           mkdir dist/games
           cp dist/index.html dist/404.html
 
+      - name: Configure Git user
+        run: |
+          git config --global user.email "512412344@qq.com"
+          git config --global user.name "Humandetail"
+
+      - name: Debug Git status
+        run: |
+          git status
+          git log -n 5
+
 
       - name: Deploy entry to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
