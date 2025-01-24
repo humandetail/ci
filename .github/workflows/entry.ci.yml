@@ -55,6 +55,6 @@ jobs:
       - name: Deploy entry to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }} 
           publish_dir: packages/entry/dist
           destination_dir: "./entry"
