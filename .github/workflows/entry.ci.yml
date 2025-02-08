@@ -12,14 +12,20 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 2  # 获取最近两次提交，以便比较变化
 
       - name: Detect changed packages
         id: changed-packages
         run: |
           # 检测哪些 package 发生了变化
-          CHANGED_PACKAGES=$(git diff --name-only HEAD^ HEAD | grep -o 'packages/[^/]*' | sort | uniq)
+          if git rev-parse --verify HEAD^ > /dev/null 2>&1; then
+            CHANGED_PACKAGES=$(git diff --name-only HEAD^ HEAD | grep -o 'packages/[^/]*' | sort | uniq)
+          else
+            CHANGED_PACKAGES=$(git ls-tree -r HEAD --name-only | grep -o 'packages/[^/]*' | sort | uniq)
+          fi
           echo "Changed packages: $CHANGED_PACKAGES"
-          echo "::set-output name=packages::$(echo $CHANGED_PACKAGES | tr '\n' ' ')"
+          echo "packages=$CHANGED_PACKAGES" >> $GITHUB_OUTPUT
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
