@@ -1,1 +1,0 @@
-export const TETRIS_HIGH_SCORE = 'TETRIS_HIGH_SCORE'

@@ -1,1 +1,0 @@
-export const LINK_GAME_LEVEL = 'LINK_GAME_LEVEL'
