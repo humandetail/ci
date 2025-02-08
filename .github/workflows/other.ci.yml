@@ -6,7 +6,13 @@ on:
     branches:
       - main
     paths:
-      - 'packages/**'
+      - packages/2048
+      - packages/Chinese-chess
+      - packages/greedy-snake
+      - packages/link-game
+      - packages/mine-sweeper
+      - packages/spider-solitaire
+      - packages/tetris
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
