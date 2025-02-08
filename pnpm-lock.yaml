@@ -62,6 +62,9 @@ importers:
       hammerjs:
         specifier: ^2.0.8
         version: 2.0.8
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       lodash.clonedeep:
         specifier: ^4.5.0
         version: 4.5.0
@@ -125,8 +128,8 @@ importers:
         specifier: ^1.56.0
         version: 1.56.0
       typescript:
-        specifier: ^5.0.2
-        version: 5.0.2
+        specifier: ^4.6.4
+        version: 4.9.4
       unplugin-auto-import:
         specifier: ^0.16.7
         version: 0.16.7
@@ -141,7 +144,7 @@ importers:
         version: 0.24.3(sass@1.56.0)
       vue-tsc:
         specifier: ^1.0.9
-        version: 1.0.17(typescript@5.0.2)
+        version: 1.0.17(typescript@4.9.4)
 
   packages/entry:
     devDependencies:
@@ -4810,12 +4813,6 @@ packages:
     engines: {node: '>=4.2.0'}
     hasBin: true
 
-  /typescript@5.0.2:
-    resolution: {integrity: sha512-wVORMBGO/FAs/++blGNeAVdbNKtIh1rbBL2EyQ1+J9lClJ93KiiKe8PmFIVdXhHcyv44SL9oglmfeSsndo0jRw==}
-    engines: {node: '>=12.20'}
-    hasBin: true
-    dev: true
-
   /ufo@0.8.6:
     resolution: {integrity: sha512-fk6CmUgwKCfX79EzcDQQpSCMxrHstvbLswFChHS0Vump+kFkw7nJBfTZoC1j0bOGoY9I7R3n2DGek5ajbcYnOw==}
     dev: true
@@ -5164,17 +5161,6 @@ packages:
       '@volar/vue-language-core': 1.0.17
       '@volar/vue-typescript': 1.0.17
       typescript: 4.9.4
-    dev: true
-
-  /vue-tsc@1.0.17(typescript@5.0.2):
-    resolution: {integrity: sha512-NsVWEiR5dBau1wA07f7HcQ30NHPx7eX3AJ330vl9pbad5qoUy98bjhavhV09LVt+XLIqJ33Us5RqdWTcFR/QDA==}
-    hasBin: true
-    peerDependencies:
-      typescript: '*'
-    dependencies:
-      '@volar/vue-language-core': 1.0.17
-      '@volar/vue-typescript': 1.0.17
-      typescript: 5.0.2
     dev: true
 
   /vue-types@3.0.2(vue@3.2.45):
