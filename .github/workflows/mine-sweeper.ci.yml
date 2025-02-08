@@ -1,4 +1,4 @@
-name: Deploy 2048 page
+name: Deploy mine-sweeper page
 
 on:
   # Runs on pushes targeting the default branch
@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - 'packages/2048/**'
+      - 'packages/mine-sweeper/**'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -27,12 +27,12 @@ jobs:
 
       - name: Build and deploy
         run: |
-          cd ./packages/2048
+          cd ./packages/mine-sweeper
           pnpm install
           pnpm run build
           echo "==========Move dist to root=========="
-          mkdir -p ../../dist/2048
-          cp -r dist/* ../../dist/2048
+          mkdir -p ../../dist/mine-sweeper
+          cp -r dist/* ../../dist/mine-sweeper
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

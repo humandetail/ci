@@ -31,11 +31,8 @@ jobs:
           pnpm install
           pnpm run build
           echo "==========Move dist to root=========="
-          pwd
-          ls ../../
           mkdir -p ../../dist
           cp -r dist/* ../../dist
-          ls ../../dist
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
