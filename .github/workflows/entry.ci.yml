@@ -46,9 +46,9 @@ jobs:
           ls ../../
           mkdir -p ../../dist
           cp -r dist/* ../../dist
+          ls ../../dist
 
       - name: Deploy to GitHub Pages
-        if: ${{ steps.changed-packages.outputs.packages != '' }}
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
