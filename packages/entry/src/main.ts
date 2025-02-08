@@ -7,6 +7,6 @@ const app = document.querySelector('#app')!
 
 const oGames = createGameList(games, members, import.meta.env.VITE_APP_PATHNAME)
 
-console.log('test change！!!！')
+console.log('test change！!!!！')
 
 app.appendChild(oGames)
