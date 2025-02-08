@@ -44,8 +44,8 @@ jobs:
             if [[ "$package" == "packages/2048" || "$package" == "packages/Chinese-chess" || "$package" == "packages/greedy-snake" || "$package" == "packages/link-game" || "$package" == "packages/mine-sweeper" || "$package" == "packages/spider-solitaire" || "$package" == "packages/tetris" ]]; then
               echo "Building and deploying $package"
               cd $package
-              npm install
-              npm run build
+              pnpm install
+              pnpm run build
               echo "====Build completed.===="
               pwd
               ls
