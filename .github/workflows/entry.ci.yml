@@ -1,70 +1,52 @@
-name: Deploy Entry page
+name: Build and Deploy
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches:
-      - main
-    paths:
-      - 'packages/entry/**'
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Allow one concurrent deployment
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
+      - main  # 你可以根据需要更改分支
 
 jobs:
-  # Single deploy job since we're just deploying
-  deploy:
-    #environment:
-    #  name: github-pages
-    #  url: ${{ steps.deployment.outputs.page_url }}
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Detect changed packages
+        id: changed-packages
+        run: |
+          # 检测哪些 package 发生了变化
+          CHANGED_PACKAGES=$(git diff --name-only HEAD^ HEAD | grep -o 'packages/[^/]*' | sort | uniq)
+          echo "Changed packages: $CHANGED_PACKAGES"
+          echo "::set-output name=packages::$(echo $CHANGED_PACKAGES | tr '\n' ' ')"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: '16'
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 7.13.4
+          node-version: 16  # 你可以根据需要更改 Node.js 版本
 
-      - name: Install dependencies
+      - name: Build and deploy changed packages
         run: |
-          cd ./packages/entry
-          pnpm install
+          # 遍历所有发生变化的 packages
+          for package in ${{ steps.changed-packages.outputs.packages }}; do
+            if [[ "$package" == "packages/entry" || "$package" == "packages/demo1" || "$package" == "packages/demo2" ]]; then
+              echo "Building and deploying $package"
+              cd $package
+              npm install
+              npm run build
+              # 部署到 GitHub Pages
+              PUBLISH_DIR=$(basename $package)
+              mkdir -p ../dist/$PUBLISH_DIR
+              cp -r dist/* ../dist/$PUBLISH_DIR
+              cd ..
+            fi
+          done
 
-      - name: Build Entry Page
-        run: |
-          cd ./packages/entry
-          pnpm run build
-          mkdir dist/games
-          cp dist/index.html dist/404.html
-
-      - name: Configure Git user
-        run: |
-          git config --global user.email "512412344@qq.com"
-          git config --global user.name "Humandetail"
-
-      - name: Debug Git status
-        run: |
-          git status
-          git log -n 5
-
-
-      - name: Deploy entry to GitHub Pages
+      - name: Deploy to GitHub Pages
+        if: ${{ steps.changed-packages.outputs.packages != '' }}
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }} 
-          publish_dir: packages/entry/dist
-          destination_dir: "./entry"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist
+          keep_files: true  # 保留之前构建的文件
