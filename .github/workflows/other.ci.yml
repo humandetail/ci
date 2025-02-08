@@ -1,0 +1,70 @@
+name: Deploy entry page
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/**'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect changed packages
+        id: changed-packages
+        run: |
+          # 检测哪些 package 发生了变化
+          if git rev-parse --verify HEAD^ > /dev/null 2>&1; then
+            CHANGED_PACKAGES=$(git diff --name-only HEAD^ HEAD | grep -o 'packages/[^/]*' | sort | uniq)
+          else
+            CHANGED_PACKAGES=$(git ls-tree -r HEAD --name-only | grep -o 'packages/[^/]*' | sort | uniq)
+          fi
+          echo "Changed packages: $CHANGED_PACKAGES"
+          echo "packages=$CHANGED_PACKAGES" >> $GITHUB_OUTPUT
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 7.13.4
+
+      - name: Build and deploy
+        run: |
+          # 遍历所有发生变化的 packages
+            for package in ${{ steps.changed-packages.outputs.packages }}; do
+              if [[ "$package" == "packages/2048" || "$package" == "packages/Chinese-chess" || "$package" == "packages/greedy-snake" || "$package" == "packages/link-game" || "$package" == "packages/mine-sweeper" || "$package" == "packages/spider-solitaire" || "$package" == "packages/tetris" ]]; then
+                echo "Building and deploying $package"
+                cd $package
+                npm install
+                npm run build
+                echo "====Build completed.===="
+                pwd
+                ls
+                # 部署到 GitHub Pages
+                PUBLISH_DIR=$(basename $package)
+                mkdir -p ../../dist/$PUBLISH_DIR
+                cp -r dist/* ../../dist/$PUBLISH_DIR
+                echo "====Copied.===="
+                cd ../../
+                pwd
+                ls
+              fi
+            done
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          keep_files: true  # 保留之前构建的文件
