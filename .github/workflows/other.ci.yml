@@ -22,9 +22,9 @@ jobs:
         run: |
           # 检测哪些 package 发生了变化
           if git rev-parse --verify HEAD^ > /dev/null 2>&1; then
-            CHANGED_PACKAGES=$(git diff --name-only HEAD^ HEAD | grep -o 'packages/[^/]*' | sort | uniq)
+            CHANGED_PACKAGES=$(git diff --name-only HEAD^ HEAD | grep -o 'packages/[^/]*' | sort | uniq | tr '\n' ' ')
           else
-            CHANGED_PACKAGES=$(git ls-tree -r HEAD --name-only | grep -o 'packages/[^/]*' | sort | uniq)
+            CHANGED_PACKAGES=$(git ls-tree -r HEAD --name-only | grep -o 'packages/[^/]*' | sort | uniq | tr '\n' ' ')
           fi
           echo "Changed packages: $CHANGED_PACKAGES"
           echo "packages=$CHANGED_PACKAGES" >> $GITHUB_OUTPUT
