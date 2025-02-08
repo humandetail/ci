@@ -41,11 +41,9 @@ jobs:
           cd ./packages/entry
           pnpm install
           pnpm run build
-
-      - name: Copy dist
-        run: |
-          mkdir -p ./dist
-          cp -r ./packages/entry/dist ./dist
+          echo "Move dist to root"
+          mkdir -p ../../dist
+          cp -r ./dist/* ../../dist
 
       - name: Deploy to GitHub Pages
         if: ${{ steps.changed-packages.outputs.packages != '' }}
