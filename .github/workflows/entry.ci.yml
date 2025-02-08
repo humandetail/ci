@@ -41,7 +41,8 @@ jobs:
           cd ./packages/entry
           pnpm install
           pnpm run build
-          echo "Move dist to root"
+          echo "==========Move dist to root=========="
+          pwd
           mkdir -p ../../dist
           cp -r ./dist/* ../../dist
 
