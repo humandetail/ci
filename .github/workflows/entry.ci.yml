@@ -41,11 +41,15 @@ jobs:
               cd $package
               npm install
               npm run build
+              pwd
+              ls dist
               # 部署到 GitHub Pages
               PUBLISH_DIR=$(basename $package)
               mkdir -p ../dist/$PUBLISH_DIR
               cp -r dist/* ../dist/$PUBLISH_DIR
               cd ..
+              pwd
+              ls
             fi
           done
 
