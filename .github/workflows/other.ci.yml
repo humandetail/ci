@@ -21,6 +21,14 @@ jobs:
         id: changed-packages
         run: |
           # 检测哪些 package 发生了变化
+          echo "Debugging git diff:"
+          git diff HEAD^ HEAD --name-only  # 输出具体的变化文件
+          
+          # 检查工作树中所有文件
+          echo "Debugging git ls-tree:"
+          git ls-tree -r HEAD --name-only  # 输出树中的所有文件
+
+          echo "===================="
           if git rev-parse --verify HEAD^ > /dev/null 2>&1; then
             CHANGED_PACKAGES=$(git diff --name-only HEAD^ HEAD | grep -o 'packages/[^/]*' | sort | uniq | tr '\n' ' ')
           else
